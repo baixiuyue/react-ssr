@@ -3,15 +3,20 @@ const path = require('path');
 const chalk = require('chalk');
 const childProcess = require('child_process');
 const webpack = require('webpack');
-const serverWebpack = require('./webpack.dev');
+const serverWebpack = require('./webpack.server');
 const clientWebpack = require('./webpack.client');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
 // dev模式webpack配置修改
 serverWebpack.mode = 'development';
-serverWebpack.entry = './src/index.ssr.tsx';
+serverWebpack.entry = './src/index.ssr.dev.tsx';
 clientWebpack.mode = 'development';
+
+// 实现浏览器自动更新
+clientWebpack.plugins.push(new webpack.HotModuleReplacementPlugin());
+clientWebpack.plugins.push(new webpack.NoEmitOnErrorsPlugin());
+clientWebpack.entry = ['webpack-hot-middleware/client', './src/index.tsx'];
 
 function createMiddleware(compiler, config) {
   return webpackDevMiddleware(compiler, {
@@ -69,7 +74,7 @@ app.use(function (req, res, next) {
       const serverFileStr = result2.toString();
       eval(serverFileStr);
       const contentHtml = global.rtnRootHtmlContent(req.path);
-      res.set('content-type', 'text/html');
+      res.set('content-type', 'text/event-stream');
       res.send(htmlFileStr.replace('<!-- CONTENT -->',contentHtml));
       res.end();
     });
@@ -93,6 +98,7 @@ function startExpress() {
 }
 
 clientCompiler.hooks.done.tap('server start', () => {
+  console.log('-----代码修改热更新-----')
   if (!STARTED) {
     startExpress();
   }

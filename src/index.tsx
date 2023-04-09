@@ -10,3 +10,9 @@ const RootApp = () => {
 };
  
 hydrateRoot(document.getElementById("root") as any, <RootApp />);
+
+declare var module;
+if (module.hot) {
+  hydrateRoot(document.getElementById("root") as any, <RootApp />);
+  module.hot.accept();
+}

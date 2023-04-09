@@ -26,6 +26,7 @@ module.exports = {
     ],
   },
   externals: [nodeExternals()],
+  plugins: [],
   resolve: {
     alias:{
       '@': path.join(__dirname, './src'),
