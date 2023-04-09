@@ -12,6 +12,7 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement as any);
 
 // hydrateRoot(document.getElementById("root") as any, <RootApp />);
+console.log('process.env.SSR', process.env.SSR); // client
 
 declare var module;
 if (module.hot) {

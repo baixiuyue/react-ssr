@@ -1,6 +1,8 @@
 // webpack.server.js
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
+const webpack = require('webpack');
+
 module.exports = {
   cache: true,
   mode: "production",
@@ -27,7 +29,11 @@ module.exports = {
     ],
   },
   externals: [nodeExternals()],
-  plugins: [],
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.SSR': JSON.stringify('server')
+    })
+  ],
   resolve: {
     alias:{
       '@': path.join(__dirname, './src'),

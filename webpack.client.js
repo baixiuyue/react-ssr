@@ -1,6 +1,7 @@
 // webpack.client.js
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const timestamp = Date.now().toString();
 
@@ -35,6 +36,9 @@ module.exports = {
       inject: true,
       timestamp,
     }),
+    new webpack.DefinePlugin({
+      'process.env.SSR': JSON.stringify('client')
+    })
   ],
   resolve: {
     alias:{
