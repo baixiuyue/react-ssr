@@ -5,7 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const timestamp = Date.now().toString();
 
 module.exports = {
-  mode: "production",
+  cache: true,
+  mode: "development",
   entry: "./src/index.tsx",
   output: {
     path: path.resolve(__dirname, "./dist/client"),

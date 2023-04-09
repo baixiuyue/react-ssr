@@ -39,9 +39,8 @@ function createHotMiddleware(compiler, path) {
 const serverCompiler = webpack(serverWebpack);
 const clientCompiler = webpack(clientWebpack);
 const middleware = createMiddleware(serverCompiler, serverWebpack);
-const hotMiddleware = createHotMiddleware(serverCompiler, '/server/__webpack_hmr');
 const clientMiddleware = createMiddleware(clientCompiler, clientWebpack);
-const clientHotMiddleware = createHotMiddleware(clientCompiler, '/client/__webpack_hmr');
+const clientHotMiddleware = createHotMiddleware(clientCompiler, '/__webpack_hmr');
 
 
 const app = express();
@@ -51,10 +50,8 @@ let STARTED = false;
 // // 接口代理转发，解决接口跨域问题
 // proxy(app);
 app.use(middleware);
-app.use(hotMiddleware);
 app.use(clientMiddleware);
 app.use(clientHotMiddleware);
-
 
 app.use(function (req, res, next) {
 
@@ -74,7 +71,7 @@ app.use(function (req, res, next) {
       const serverFileStr = result2.toString();
       eval(serverFileStr);
       const contentHtml = global.rtnRootHtmlContent(req.path);
-      res.set('content-type', 'text/event-stream');
+      res.set('content-type', 'text/html');
       res.send(htmlFileStr.replace('<!-- CONTENT -->',contentHtml));
       res.end();
     });
@@ -97,8 +94,8 @@ function startExpress() {
   });
 }
 
-clientCompiler.hooks.done.tap('server start', () => {
-  console.log('-----代码修改热更新-----')
+clientCompiler.hooks.done.tap('server start', (aa) => {
+  console.log('-----代码修改热更新-----');
   if (!STARTED) {
     startExpress();
   }

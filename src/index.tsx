@@ -1,5 +1,5 @@
 import React from "react";
-import { hydrateRoot } from "react-dom/client";
+import { hydrateRoot, createRoot } from "react-dom/client";
 import { BrowserRouter } from 'react-router-dom';
 import App from '@/app';
 
@@ -8,11 +8,15 @@ const RootApp = () => {
     <App></App>
   </BrowserRouter>;
 };
- 
-hydrateRoot(document.getElementById("root") as any, <RootApp />);
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement as any);
+
+// hydrateRoot(document.getElementById("root") as any, <RootApp />);
 
 declare var module;
 if (module.hot) {
-  hydrateRoot(document.getElementById("root") as any, <RootApp />);
+  root.render(<RootApp />);
   module.hot.accept();
+} else {
+  hydrateRoot(document.getElementById("root") as any, <RootApp />);
 }
