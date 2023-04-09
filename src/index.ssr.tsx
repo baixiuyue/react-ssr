@@ -10,7 +10,8 @@ app.use(express.static(path.join(__dirname, '../client')));
 console.log('__dirname', __dirname);
 app.use(async (req, res, next) => {
   console.log('path', req.path);
-  const result = templateHtml.replace('<!-- CONTENT -->',global.rtnRootHtmlContent(req.path)).replace('/client','.');
+  const  contentSSR = global.rtnRootHtmlContent(req.path);
+  const result = templateHtml.replace('<div id="root"></div>',`<div id="root">${contentSSR}</div>`).replace('/client','.');
   res.set('content-type', 'text/html');
   res.send(result);
   res.end();

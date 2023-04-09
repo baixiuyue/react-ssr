@@ -7,7 +7,7 @@ const timestamp = Date.now().toString();
 
 module.exports = {
   cache: true,
-  mode: "development",
+  mode: "production",
   entry: "./src/index.tsx",
   output: {
     path: path.resolve(__dirname, "./dist/client"),
